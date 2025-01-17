@@ -48,3 +48,27 @@ get_data = PythonOperator(
     provide_context = True,
     dag=dag
 )
+
+create_table = PostgresOperator(task_id="create_table", postgres_conn_id="postgres",
+                                sql='''create table if not exists
+                                sensors (idtemp varcharm powerfactor varchar,
+                                hydraulicpressure varchar, temperature varchar,
+                                timestamp varchar);
+                                ''',
+                                task_group=group_database,
+                                dag=dag)
+
+insert_data = PostgresOperator(task_id='insert_data',
+                               postgres_conn_id='postgres',
+                               parameters=(
+                               '{{ ti.xcom_pull(task_ids="get_data",key="idtemp") }}',
+                               '{{ ti.xcom_pull(task_ids="get_data",key="powerfactor") }}',
+                               '{{ ti.xcom_pull(task_ids="get_data",key="hydraulicpressure") }}',
+                               '{{ ti.xcom_pull(task_ids="get_data",key="temperature") }}',
+                               '{{ ti.xcom_pull(task_ids="get_data",key="timestamp") }}'
+                               ),
+                               sql = '''INSERT INTO sensors (idtemp, powerfactor, 
+                               hydraulicpressure, temperature, timestamp)
+                               VALUES (%s, %s, %s, %s, %s);''',
+                               task_group = group_database,
+                               dag=dag)
