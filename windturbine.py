@@ -72,3 +72,44 @@ insert_data = PostgresOperator(task_id='insert_data',
                                VALUES (%s, %s, %s, %s, %s);''',
                                task_group = group_database,
                                dag=dag)
+
+send_email_alert= EmailOperator(task_id='send_email_alert',
+                                to='', # adicionar email
+                                subject='Airflow alert',
+                                html_content='''<h3>Alerta de temperatura. </h3>
+                                <p> Dag: windturbine </p>
+                                ''',
+                                task_group = group_check_temp,
+                                dag=dag)
+
+send_email_normal= EmailOperator(task_id='send_email_normal',
+                                to='', # adicionar email
+                                subject='Airflow advise',
+                                html_content='''<h3>Temperaturas normais. </h3>
+                                <p> Dag: windturbine </p>
+                                ''',
+                                task_group = group_check_temp,
+                                dag=dag)
+
+def avalia_temp(**context):
+    number = float(context['ti'].xcom_pull(task_ids='get_data', key='temperature'))
+    if number >= 24:
+        return 'group_check_temp.send_email_alert'
+    else:
+        return 'group_check_temp.send_email_normal'
+
+check_temp_branch = BranchPythonOperator(task_id = 'check_temp_branch',
+                                         python_callable=avalia_temp,
+                                         provide_context = True,
+                                         dag=dag,
+                                         task_group = group_check_temp)
+
+with group_check_temp:
+    check_temp_branch >> [send_email_alert, send_email_normal]
+
+with group_database:
+    create_table >> insert_data
+
+file_sensor_task >> get_data
+get_data >> group_check_temp
+get_data >> group_database
