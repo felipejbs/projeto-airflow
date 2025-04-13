@@ -3,7 +3,7 @@
 
 # 🌬️🌀 Wind Turbine
 
-Este projeto é um pipeline de dados orquestrado com **Apache Airflow**, responsável por monitorar arquivos gerados por turbinas eólicas, processá-los, tomar decisões baseadas em temperatura, e então armazenar os dados em um banco de dados PostgreSQL e enviar alertas personalizados por e-mail com base na temperatura.
+Este projeto é um pipeline de dados orquestrado com **Apache Airflow**, responsável por monitorar arquivos gerados por turbinas eólicas, processá-los, e então armazenar os dados em um banco de dados PostgreSQL e enviar alertas personalizados por e-mail com base na temperatura.
 
 ---
 
