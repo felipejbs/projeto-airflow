@@ -1,9 +1,9 @@
 # projeto-airflow
 ![image](https://github.com/user-attachments/assets/7f0f7c3d-a3d1-4fdf-8d50-c2f015785dfe)
 
-# 🌬️ Wind Turbine Data Pipeline com Apache Airflow
+# 🌬️🌀 Wind Turbine
 
-Este projeto é um pipeline de dados orquestrado com **Apache Airflow**, responsável por monitorar arquivos gerados por turbinas eólicas, processá-los, tomar decisões baseadas em temperatura, e então armazenar os dados em um banco de dados PostgreSQL ou enviar alertas por e-mail.
+Este projeto é um pipeline de dados orquestrado com **Apache Airflow**, responsável por monitorar arquivos gerados por turbinas eólicas, processá-los, tomar decisões baseadas em temperatura, e então armazenar os dados em um banco de dados PostgreSQL e enviar alertas personalizados por e-mail com base na temperatura.
 
 ---
 
@@ -11,11 +11,12 @@ Este projeto é um pipeline de dados orquestrado com **Apache Airflow**, respons
 
 O fluxo de trabalho se baseia na seguinte sequência de tarefas:
 
-1. **Monitoramento de Arquivos**: Verifica a presença de novos arquivos gerados por turbinas eólicas.
+1. **Monitoramento de Arquivos**: Verifica a presença de novos arquivos que contêm os dados gerados por turbinas eólicas.
 2. **Processamento com Python**: Executa uma lógica de extração e pré-processamento.
 3. **Decisão Ramificada**:
-   - Verifica condições de temperatura.
-   - Decide entre armazenar no banco de dados ou enviar um alerta por e-mail.
+   - Verifica as condições de temperatura.
+   - Sempre armazena os dados no banco de dados.
+   - Envia um e-mail com mensagem personalizada dependendo da temperatura (normal ou anormal).
 
 ---
 
@@ -83,8 +84,8 @@ O `BranchPythonOperator` executa uma função que verifica a temperatura present
 
 1. Clone este repositório:
 ```bash
-git clone https://github.com/seuusuario/windturbine-airflow.git
-cd windturbine-airflow
+git clone https://github.com/felipejbs/projeto-airflow.git
+cd projeto-airflow
 ```
 
 2. Crie um ambiente virtual e instale os requisitos:
@@ -112,4 +113,4 @@ airflow webserver --port 8080
 
 ## 📬 Contato
 
-Para dúvidas ou sugestões, entre em contato com [seu-email@dominio.com].
+Para dúvidas ou sugestões, entre em contato com [felipejeronimobs@gmail.com].
